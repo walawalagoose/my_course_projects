@@ -1,0 +1,509 @@
+# ===============================================================================================
+# The following shows the last analyze fail log message.
+# ===============================================================================================
+
+----------------------------------------------------
+- Caught exception:
+----------------------------------------------------
+For 'Sub', input1.shape and input2.shape need to broadcast. The value of input1.shape[2] or input2.shape[1] must be 1 or -1 when they are not the same, but got input1.shape = [17, 2] and input2.shape = [17]
+
+----------------------------------------------------
+- C++ Call Stack: (For framework developers)
+----------------------------------------------------
+mindspore\ops\ops_utils\op_utils.cc:84 mindspore::ops::CalBroadCastShape
+
+----------------------------------------------------
+- The Traceback of Net Construct Code:
+----------------------------------------------------
+# 0 In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:426~427, 8~46
+        if not self.sense_flag:
+# 1 In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:427, 19~46
+            return self._no_sens_impl(*inputs)
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 2 In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:447~448, 8~95
+        if self.use_graceful_exit:
+# 3 In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:450~454, 8~45
+        if self.return_grad:
+# 4 In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:444, 15~36
+        loss = self.network(*inputs)
+               ^~~~~~~~~~~~~~~~~~~~~
+# 5 In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:391, 21~36
+        x = F.square(logits - labels)
+                     ^~~~~~~~~~~~~~~
+
+# ===============================================================================================
+# The following shows the IR when the function graphs evaluation fails to help locate the problem.
+# You can search the last ------------------------> to the node which is evaluated failure.
+# Refer to https://www.mindspore.cn/search?inputValue=analyze_fail.ir to get more instructions.
+# ===============================================================================================
+
+# IR entry: @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_16
+# Total subgraphs: 0
+
+# Attrs:
+training: 1
+
+# Total params: 2
+# Params:
+%para1_inputs0: <null>
+%para2_inputs1: <null>
+
+subgraph attr:
+training: 1
+subgraph instance: mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_16 : 000001F7219FB160
+# In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:425~440, 4~19/    def construct(self, *inputs):/
+subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_16() {
+  %0(CNode_35) = resolve(NameSpace[Entry: 'mindspore.nn.wrap.cell_wrapper.TrainOneStepCell.construct'], mindspore.nn.wrap.cell_wrapper.TrainOneStepCell.construct)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+  %1(CNode_36) = MakeTuple(%para1_inputs0, %para2_inputs1)
+      : (<Tensor[Float32], (17, 2)>, <Tensor[Float32], (17)>) -> (<Tuple[Tensor[Float32]*2], TupleShape((17, 2), (17))>)
+      #scope: (Default)
+
+#------------------------> 0
+  %2(CNode_37) = DoUnpackCall(%0, %1)
+      : (<Func, NoShape>, <Tuple[Tensor[Float32]*2], TupleShape((17, 2), (17))>) -> (<null>)
+      #scope: (Default)
+  Return(%2)
+      : (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:426~427, 8~46/        if not self.sense_flag:/
+}
+# Order:
+#   1: @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_16:CNode_35{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> Entry: 'mindspore.nn.wrap.cell_wrapper.TrainOneStepCell.construct', [2]: ValueNode<Symbol> mindspore.nn.wrap.cell_wrapper.TrainOneStepCell.construct}
+#   2: @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_16:CNode_37{[0]: ValueNode<Primitive> DoUnpackCall, [1]: CNode_35, [2]: CNode_36}
+#   3: @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_16:CNode_38{[0]: ValueNode<Primitive> Return, [1]: CNode_37}
+
+
+subgraph attr:
+core: 1
+subgraph instance: UnpackCall_17 : 000001F7219FE370
+
+subgraph @UnpackCall_17(%para0_Parameter_18, %para0_Parameter_19) {
+  %0(CNode_39) = TupleGetItem(%para0_Parameter_19, I64(0))
+      : (<Tuple[Tensor[Float32]*2], TupleShape((17, 2), (17))>, <Int64, NoShape>) -> (<Tensor[Float32], (17, 2)>)
+      #scope: (Default)
+  %1(CNode_40) = TupleGetItem(%para0_Parameter_19, I64(1))
+      : (<Tuple[Tensor[Float32]*2], TupleShape((17, 2), (17))>, <Int64, NoShape>) -> (<Tensor[Float32], (17)>)
+      #scope: (Default)
+
+#------------------------> 1
+  %2(CNode_41) = Parameter_18(%0, %1)
+      : (<Tensor[Float32], (17, 2)>, <Tensor[Float32], (17)>) -> (<null>)
+      #scope: (Default)
+  Return(%2)
+      : (<null>)
+      #scope: (Default)
+}
+# Order:
+#   1: @UnpackCall_17:CNode_41{[0]: param_Parameter_18, [1]: CNode_39, [2]: CNode_40}
+#   2: @UnpackCall_17:CNode_42{[0]: ValueNode<Primitive> Return, [1]: CNode_41}
+
+
+subgraph attr:
+training: 1
+subgraph instance: mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_20 : 000001F7219FE900
+# In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:425~440, 4~19/    def construct(self, *inputs):/
+subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_20(%para0_inputs0, %para0_inputs1) {
+
+#------------------------> 2
+  %0(CNode_43) = call @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_21()
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:426~427, 8~46/        if not self.sense_flag:/
+  Return(%0)
+      : (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:426~427, 8~46/        if not self.sense_flag:/
+}
+# Order:
+#   1: @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_20:CNode_43{[0]: ValueNode<FuncGraph> mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_21}
+#   2: @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_20:CNode_44{[0]: ValueNode<Primitive> Return, [1]: CNode_43}
+#   3: @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_20:CNode_45{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:mindspore.nn.wrap.cell_wrapper..<TrainOneStepCell::2161001127696>', [2]: ValueNode<Symbol> _no_sens_impl}
+
+
+subgraph attr:
+training: 1
+subgraph instance: mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_21 : 000001F7219FDDE0
+# In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:425~440, 4~19/    def construct(self, *inputs):/
+subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_21 parent: [subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_20]() {
+  %0(CNode_45) = resolve(NameSpace[ClassMember: 'Namespace:mindspore.nn.wrap.cell_wrapper..<TrainOneStepCell::2161001127696>'], _no_sens_impl)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:427, 19~37/            return self._no_sens_impl(*inputs)/
+  %1(CNode_46) = MakeTuple(%para0_inputs0, %para0_inputs1)
+      : (<Tensor[Float32], (17, 2)>, <Tensor[Float32], (17)>) -> (<Tuple[Tensor[Float32]*2], TupleShape((17, 2), (17))>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:425, 25~31/    def construct(self, *inputs):/
+
+#------------------------> 3
+  %2(CNode_47) = DoUnpackCall(%0, %1)
+      : (<Func, NoShape>, <Tuple[Tensor[Float32]*2], TupleShape((17, 2), (17))>) -> (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:427, 19~46/            return self._no_sens_impl(*inputs)/
+  Return(%2)
+      : (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:427, 12~46/            return self._no_sens_impl(*inputs)/
+}
+# Order:
+#   1: @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_21:CNode_47{[0]: ValueNode<Primitive> DoUnpackCall, [1]: CNode_45, [2]: CNode_46}
+#   2: @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_21:CNode_48{[0]: ValueNode<Primitive> Return, [1]: CNode_47}
+
+
+subgraph attr:
+core: 1
+subgraph instance: UnpackCall_22 : 000001F7219FC210
+
+subgraph @UnpackCall_22(%para0_Parameter_23, %para0_Parameter_24) {
+  %0(CNode_49) = TupleGetItem(%para0_Parameter_24, I64(0))
+      : (<Tuple[Tensor[Float32]*2], TupleShape((17, 2), (17))>, <Int64, NoShape>) -> (<Tensor[Float32], (17, 2)>)
+      #scope: (Default)
+  %1(CNode_50) = TupleGetItem(%para0_Parameter_24, I64(1))
+      : (<Tuple[Tensor[Float32]*2], TupleShape((17, 2), (17))>, <Int64, NoShape>) -> (<Tensor[Float32], (17)>)
+      #scope: (Default)
+
+#------------------------> 4
+  %2(CNode_51) = Parameter_23(%0, %1)
+      : (<Tensor[Float32], (17, 2)>, <Tensor[Float32], (17)>) -> (<null>)
+      #scope: (Default)
+  Return(%2)
+      : (<null>)
+      #scope: (Default)
+}
+# Order:
+#   1: @UnpackCall_22:CNode_51{[0]: param_Parameter_23, [1]: CNode_49, [2]: CNode_50}
+#   2: @UnpackCall_22:CNode_52{[0]: ValueNode<Primitive> Return, [1]: CNode_51}
+
+
+subgraph attr:
+training: 1
+subgraph instance: _no_sens_impl_25 : 000001F7219FFF40
+# In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:442~455, 4~19/    def _no_sens_impl(self, *inputs):/
+subgraph @_no_sens_impl_25(%para0_inputs0, %para0_inputs1) {
+
+#------------------------> 5
+  %0(CNode_53) = call @_no_sens_impl_26()
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:447~448, 8~95/        if self.use_graceful_exit:/
+  Return(%0)
+      : (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:447~448, 8~95/        if self.use_graceful_exit:/
+}
+# Order:
+#   1: @_no_sens_impl_25:CNode_54{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:mindspore.nn.wrap.cell_wrapper..<TrainOneStepCell::2161001127696>', [2]: ValueNode<Symbol> network}
+#   2: @_no_sens_impl_25:loss{[0]: ValueNode<Primitive> DoUnpackCall, [1]: CNode_54, [2]: CNode_55}
+#   3: @_no_sens_impl_25:CNode_56{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:mindspore.nn.wrap.cell_wrapper..<TrainOneStepCell::2161001127696>', [2]: ValueNode<Symbol> grad_no_sens}
+#   4: @_no_sens_impl_25:CNode_57{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:mindspore.nn.wrap.cell_wrapper..<TrainOneStepCell::2161001127696>', [2]: ValueNode<Symbol> network}
+#   5: @_no_sens_impl_25:CNode_58{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:mindspore.nn.wrap.cell_wrapper..<TrainOneStepCell::2161001127696>', [2]: ValueNode<Symbol> weights}
+#   6: @_no_sens_impl_59:CNode_60{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#   7: @_no_sens_impl_25:CNode_61{[0]: CNode_56, [1]: CNode_57, [2]: CNode_58}
+#   8: @_no_sens_impl_25:grads{[0]: ValueNode<Primitive> DoUnpackCall, [1]: CNode_61, [2]: CNode_55}
+#   9: @_no_sens_impl_25:CNode_62{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:mindspore.nn.wrap.cell_wrapper..<TrainOneStepCell::2161001127696>', [2]: ValueNode<Symbol> grad_reducer}
+#  10: @_no_sens_impl_59:CNode_63{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  11: @_no_sens_impl_25:grads{[0]: CNode_62, [1]: grads}
+#  12: @_no_sens_impl_25:CNode_53{[0]: ValueNode<FuncGraph> _no_sens_impl_26}
+#  13: @_no_sens_impl_25:CNode_64{[0]: ValueNode<Primitive> Return, [1]: CNode_53}
+#  14: @_no_sens_impl_25:CNode_65{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> SymbolStr: 'Namespace:mindspore.nn.wrap.cell_wrapper', [2]: ValueNode<Symbol> F}
+
+
+subgraph attr:
+training: 1
+subgraph instance: _no_sens_impl_26 : 000001F7219FC7A0
+# In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:442~455, 4~19/    def _no_sens_impl(self, *inputs):/
+subgraph @_no_sens_impl_26 parent: [subgraph @_no_sens_impl_25]() {
+
+#------------------------> 6
+  %0(CNode_66) = call @_no_sens_impl_27()
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:447~448, 8~95/        if self.use_graceful_exit:/
+  Return(%0)
+      : (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:447~448, 8~95/        if self.use_graceful_exit:/
+}
+# Order:
+#   1: @_no_sens_impl_26:CNode_66{[0]: ValueNode<FuncGraph> _no_sens_impl_27}
+#   2: @_no_sens_impl_26:CNode_67{[0]: ValueNode<Primitive> Return, [1]: CNode_66}
+
+
+subgraph attr:
+training: 1
+subgraph instance: _no_sens_impl_27 : 000001F721A00FF0
+# In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:442~455, 4~19/    def _no_sens_impl(self, *inputs):/
+subgraph @_no_sens_impl_27 parent: [subgraph @_no_sens_impl_25]() {
+
+#------------------------> 7
+  %0(CNode_68) = call @_no_sens_impl_28()
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:450~454, 8~45/        if self.return_grad:/
+  Return(%0)
+      : (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:450~454, 8~45/        if self.return_grad:/
+}
+# Order:
+#   1: @_no_sens_impl_27:CNode_69{[0]: ValueNode<Primitive> getattr, [1]: CNode_65, [2]: ValueNode<StringImm> depend}
+#   2: @_no_sens_impl_27:CNode_70{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:mindspore.nn.wrap.cell_wrapper..<TrainOneStepCell::2161001127696>', [2]: ValueNode<Symbol> optimizer}
+#   3: @_no_sens_impl_71:CNode_72{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#   4: @_no_sens_impl_27:CNode_73{[0]: CNode_70, [1]: grads}
+#   5: @_no_sens_impl_71:CNode_74{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#   6: @_no_sens_impl_27:loss{[0]: CNode_69, [1]: loss, [2]: CNode_73}
+#   7: @_no_sens_impl_27:CNode_68{[0]: ValueNode<FuncGraph> _no_sens_impl_28}
+#   8: @_no_sens_impl_27:CNode_75{[0]: ValueNode<Primitive> Return, [1]: CNode_68}
+
+
+subgraph attr:
+training: 1
+subgraph instance: _no_sens_impl_28 : 000001F721A036E0
+# In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:442~455, 4~19/    def _no_sens_impl(self, *inputs):/
+subgraph @_no_sens_impl_28 parent: [subgraph @_no_sens_impl_27]() {
+
+#------------------------> 8
+  %0(CNode_76) = call @_no_sens_impl_29()
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:450~454, 8~45/        if self.return_grad:/
+  Return(%0)
+      : (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:450~454, 8~45/        if self.return_grad:/
+}
+# Order:
+#   1: @_no_sens_impl_28:CNode_76{[0]: ValueNode<FuncGraph> _no_sens_impl_29}
+#   2: @_no_sens_impl_28:CNode_77{[0]: ValueNode<Primitive> Return, [1]: CNode_76}
+
+
+subgraph attr:
+training: 1
+subgraph instance: _no_sens_impl_29 : 000001F721A03150
+# In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:442~455, 4~19/    def _no_sens_impl(self, *inputs):/
+subgraph @_no_sens_impl_29 parent: [subgraph @_no_sens_impl_27]() {
+  %0(CNode_65) = resolve(NameSpace[SymbolStr: 'Namespace:mindspore.nn.wrap.cell_wrapper'], F)
+      : (<External, NoShape>, <External, NoShape>) -> (<External, NoShape>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:449, 15~16/        loss = F.depend(loss, self.optimizer(grads))/
+  %1(CNode_69) = getattr(%0, "depend")
+      : (<External, NoShape>, <String, NoShape>) -> (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:449, 15~23/        loss = F.depend(loss, self.optimizer(grads))/
+  %2(CNode_54) = resolve(NameSpace[ClassMember: 'Namespace:mindspore.nn.wrap.cell_wrapper..<TrainOneStepCell::2161001127696>'], network)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:444, 15~27/        loss = self.network(*inputs)/
+  %3(CNode_55) = MakeTuple(%para0_inputs0, %para0_inputs1)
+      : (<Tensor[Float32], (17, 2)>, <Tensor[Float32], (17)>) -> (<Tuple[Tensor[Float32]*2], TupleShape((17, 2), (17))>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:442, 29~35/    def _no_sens_impl(self, *inputs):/
+
+#------------------------> 9
+  %4(loss) = DoUnpackCall(%2, %3)
+      : (<Func, NoShape>, <Tuple[Tensor[Float32]*2], TupleShape((17, 2), (17))>) -> (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:444, 15~36/        loss = self.network(*inputs)/
+  %5(CNode_70) = resolve(NameSpace[ClassMember: 'Namespace:mindspore.nn.wrap.cell_wrapper..<TrainOneStepCell::2161001127696>'], optimizer)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:449, 30~44/        loss = F.depend(loss, self.optimizer(grads))/
+  %6(CNode_62) = resolve(NameSpace[ClassMember: 'Namespace:mindspore.nn.wrap.cell_wrapper..<TrainOneStepCell::2161001127696>'], grad_reducer)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:446, 16~33/        grads = self.grad_reducer(grads)/
+  %7(CNode_56) = resolve(NameSpace[ClassMember: 'Namespace:mindspore.nn.wrap.cell_wrapper..<TrainOneStepCell::2161001127696>'], grad_no_sens)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:445, 16~33/        grads = self.grad_no_sens(self.network, self.weights)(*inputs)/
+  %8(CNode_57) = resolve(NameSpace[ClassMember: 'Namespace:mindspore.nn.wrap.cell_wrapper..<TrainOneStepCell::2161001127696>'], network)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:445, 34~46/        grads = self.grad_no_sens(self.network, self.weights)(*inputs)/
+  %9(CNode_58) = resolve(NameSpace[ClassMember: 'Namespace:mindspore.nn.wrap.cell_wrapper..<TrainOneStepCell::2161001127696>'], weights)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:445, 48~60/        grads = self.grad_no_sens(self.network, self.weights)(*inputs)/
+  %10(CNode_61) = %7(%8, %9)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:445, 16~61/        grads = self.grad_no_sens(self.network, self.weights)(*inputs)/
+  %11(grads) = DoUnpackCall(%10, %3)
+      : (<null>, <Tuple[Tensor[Float32]*2], TupleShape((17, 2), (17))>) -> (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:445, 16~70/        grads = self.grad_no_sens(self.network, self.weights)(*inputs)/
+  %12(grads) = %6(%11)
+      : (<null>) -> (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:446, 16~40/        grads = self.grad_reducer(grads)/
+  %13(CNode_73) = %5(%12)
+      : (<null>) -> (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:449, 30~51/        loss = F.depend(loss, self.optimizer(grads))/
+  %14(loss) = %1(%4, %13)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:449, 15~52/        loss = F.depend(loss, self.optimizer(grads))/
+  Return(%14)
+      : (<null>)
+      #scope: (Default)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:455, 8~19/        return loss/
+}
+# Order:
+#   1: @_no_sens_impl_29:CNode_78{[0]: ValueNode<Primitive> Return, [1]: loss}
+
+
+subgraph attr:
+core: 1
+subgraph instance: UnpackCall_30 : 000001F721A02BC0
+
+subgraph @UnpackCall_30(%para0_Parameter_31, %para0_Parameter_32) {
+  %0(CNode_79) = TupleGetItem(%para0_Parameter_32, I64(0))
+      : (<Tuple[Tensor[Float32]*2], TupleShape((17, 2), (17))>, <Int64, NoShape>) -> (<Tensor[Float32], (17, 2)>)
+      #scope: (Default)
+  %1(CNode_80) = TupleGetItem(%para0_Parameter_32, I64(1))
+      : (<Tuple[Tensor[Float32]*2], TupleShape((17, 2), (17))>, <Int64, NoShape>) -> (<Tensor[Float32], (17)>)
+      #scope: (Default)
+
+#------------------------> 10
+  %2(CNode_81) = Parameter_31(%0, %1)
+      : (<Tensor[Float32], (17, 2)>, <Tensor[Float32], (17)>) -> (<null>)
+      #scope: (Default)
+  Return(%2)
+      : (<null>)
+      #scope: (Default)
+}
+# Order:
+#   1: @UnpackCall_30:CNode_81{[0]: param_Parameter_31, [1]: CNode_79, [2]: CNode_80}
+#   2: @UnpackCall_30:CNode_82{[0]: ValueNode<Primitive> Return, [1]: CNode_81}
+
+
+subgraph attr:
+training: 1
+subgraph instance: mindspore_nn_loss_loss_MSELoss_construct_33 : 000001F721A01580
+# In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:388~392, 4~31/    def construct(self, logits, labels):/
+subgraph @mindspore_nn_loss_loss_MSELoss_construct_33(%para0_logits, %para0_labels) {
+  %0(CNode_83) = resolve(NameSpace[SymbolStr: 'Namespace:mindspore.nn.loss.loss'], _check_is_tensor)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:389, 8~24/        _check_is_tensor('logits', logits, self.cls_name)/
+  %1(CNode_84) = resolve(NameSpace[ClassMember: 'Namespace:mindspore.nn.loss.loss..<MSELoss::2162102097904>'], cls_name)
+      : (<External, NoShape>, <External, NoShape>) -> (<String, NoShape>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:389, 43~56/        _check_is_tensor('logits', logits, self.cls_name)/
+  %2(CNode_85) = %0("logits", %para0_logits, %1)
+      : (<String, NoShape>, <Tensor[Float32], (17, 2)>, <String, NoShape>) -> (<None, NoShape>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:389, 8~57/        _check_is_tensor('logits', logits, self.cls_name)/
+  %3(CNode_86) = resolve(NameSpace[ClassMember: 'Namespace:mindspore.nn.loss.loss..<MSELoss::2162102097904>'], cls_name)
+      : (<External, NoShape>, <External, NoShape>) -> (<String, NoShape>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:390, 43~56/        _check_is_tensor('labels', labels, self.cls_name)/
+  %4(CNode_87) = %0("labels", %para0_labels, %3)
+      : (<String, NoShape>, <Tensor[Float32], (17)>, <String, NoShape>) -> (<None, NoShape>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:390, 8~57/        _check_is_tensor('labels', labels, self.cls_name)/
+  %5(CNode_88) = MakeTuple(%2, %4)
+      : (<None, NoShape>, <None, NoShape>) -> (<Tuple[None*2], TupleShape(NoShape, NoShape)>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:388~392, 4~31/    def construct(self, logits, labels):/
+  %6(CNode_89) = StopGradient(%5)
+      : (<Tuple[None*2], TupleShape(NoShape, NoShape)>) -> (<Tuple[None*2], TupleShape(NoShape, NoShape)>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:388~392, 4~31/    def construct(self, logits, labels):/
+  %7(CNode_90) = resolve(NameSpace[ClassMember: 'Namespace:mindspore.nn.loss.loss..<MSELoss::2162102097904>'], get_loss)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:392, 15~28/        return self.get_loss(x)/
+  %8(CNode_91) = resolve(NameSpace[SymbolStr: 'Namespace:mindspore.nn.loss.loss'], F)
+      : (<External, NoShape>, <External, NoShape>) -> (<External, NoShape>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:391, 12~13/        x = F.square(logits - labels)/
+  %9(CNode_92) = getattr(%8, "square")
+      : (<External, NoShape>, <String, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:391, 12~20/        x = F.square(logits - labels)/
+  %10(CNode_93) = resolve(NameSpace[Ast: 'Namespace:mindspore._extends.parse.trope'], sub)
+      : (<External, NoShape>, <External, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:391, 21~36/        x = F.square(logits - labels)/
+
+#------------------------> 11
+  %11(CNode_94) = %10(%para0_logits, %para0_labels)
+      : (<Tensor[Float32], (17, 2)>, <Tensor[Float32], (17)>) -> (<null>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:391, 21~36/        x = F.square(logits - labels)/
+  %12(x) = %9(%11)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:391, 12~37/        x = F.square(logits - labels)/
+  %13(CNode_95) = %7(%12)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:392, 15~31/        return self.get_loss(x)/
+  %14(CNode_96) = Depend(%13, %6) primitive_attrs: {side_effect_propagate: I64(1)} cnode_attrs: {topo_sort_rhs_first: Bool(1)}
+      : (<null>, <Tuple[None*2], TupleShape(NoShape, NoShape)>) -> (<null>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:392, 15~31/        return self.get_loss(x)/
+  Return(%14)
+      : (<null>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:392, 8~31/        return self.get_loss(x)/
+}
+# Order:
+#   1: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_83{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> SymbolStr: 'Namespace:mindspore.nn.loss.loss', [2]: ValueNode<Symbol> _check_is_tensor}
+#   2: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_84{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:mindspore.nn.loss.loss..<MSELoss::2162102097904>', [2]: ValueNode<Symbol> cls_name}
+#   3: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_97{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#   5: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_85{[0]: CNode_83, [1]: ValueNode<StringImm> logits, [2]: param_logits, [3]: CNode_84}
+#   6: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_86{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:mindspore.nn.loss.loss..<MSELoss::2162102097904>', [2]: ValueNode<Symbol> cls_name}
+#   7: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_98{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#   9: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_87{[0]: CNode_83, [1]: ValueNode<StringImm> labels, [2]: param_labels, [3]: CNode_86}
+#  10: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_91{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> SymbolStr: 'Namespace:mindspore.nn.loss.loss', [2]: ValueNode<Symbol> F}
+#  11: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_92{[0]: ValueNode<Primitive> getattr, [1]: CNode_91, [2]: ValueNode<StringImm> square}
+#  12: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_93{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> Ast: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> sub}
+#  13: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_94{[0]: CNode_93, [1]: param_logits, [2]: param_labels}
+#  14: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_99{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  16: @mindspore_nn_loss_loss_MSELoss_construct_33:x{[0]: CNode_92, [1]: CNode_94}
+#  17: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_90{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:mindspore.nn.loss.loss..<MSELoss::2162102097904>', [2]: ValueNode<Symbol> get_loss}
+#  18: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_100{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#  20: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_95{[0]: CNode_90, [1]: x}
+#  22: @mindspore_nn_loss_loss_MSELoss_construct_33:CNode_101{[0]: ValueNode<Primitive> Return, [1]: CNode_96}
+
+
+subgraph attr:
+subgraph instance: _sub_tensor_34 : 000001F721A05DD0
+# In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\ops\composite\multitype_ops\sub_impl.py:39~42, 0~29/@sub.register("Tensor", "Tensor")/
+subgraph @_sub_tensor_34(%para0_x, %para0_y) {
+  %0(CNode_102) = resolve(NameSpace[SymbolStr: 'Namespace:mindspore.ops.composite.multitype_ops.sub_impl'], F)
+      : (<External, NoShape>, <External, NoShape>) -> (<External, NoShape>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:391, 21~36/        x = F.square(logits - labels)/
+  %1(CNode_103) = getattr(%0, "tensor_sub")
+      : (<External, NoShape>, <String, NoShape>) -> (<Func, NoShape>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:391, 21~36/        x = F.square(logits - labels)/
+
+#------------------------> 12
+  %2(CNode_104) = %1(%para0_x, %para0_y)
+      : (<Tensor[Float32], (17, 2)>, <Tensor[Float32], (17)>) -> (<null>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:391, 21~36/        x = F.square(logits - labels)/
+  Return(%2)
+      : (<null>)
+      #scope: (Default/network-MSELoss)
+      # In file d:\anaconda3\envs\mindspore\Lib\site-packages\mindspore\nn\loss\loss.py:391, 21~36/        x = F.square(logits - labels)/
+}
+# Order:
+#   1: @_sub_tensor_34:CNode_102{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> SymbolStr: 'Namespace:mindspore.ops.composite.multitype_ops.sub_impl', [2]: ValueNode<Symbol> F}
+#   2: @_sub_tensor_34:CNode_103{[0]: ValueNode<Primitive> getattr, [1]: CNode_102, [2]: ValueNode<StringImm> tensor_sub}
+#   3: @_sub_tensor_105:CNode_106{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> CommonOPS: 'Namespace:mindspore._extends.parse.trope', [2]: ValueNode<Symbol> MakeTuple}
+#   4: @_sub_tensor_34:CNode_104{[0]: CNode_103, [1]: param_x, [2]: param_y}
+#   5: @_sub_tensor_34:CNode_107{[0]: ValueNode<Primitive> Return, [1]: CNode_104}
+
+
+# ===============================================================================================
+# The total of function graphs in evaluation stack: 13/19 (Ignored 6 internal frames).
+# ===============================================================================================
+
+
+# ===============================================================================================
+# The rest function graphs are the following:
+# ===============================================================================================
+No more function graphs.
+
